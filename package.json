@@ -1,0 +1,35 @@
+{
+  "name": "nodens",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A curated self-portrait in systems, texts, rituals, objects, and ongoing work.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "audit": "npm audit --audit-level=high",
+    "verify": "node scripts/verify-build.mjs",
+    "test": "npm run check && npm run build && npm run verify",
+    "test:e2e": "playwright test",
+    "test:lighthouse": "node scripts/run-lighthouse.mjs",
+    "check:links": "node scripts/check-external-links.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.5",
+    "astro": "7.3.8"
+  },
+  "engines": {
+    "node": "22.19.0",
+    "npm": "11.12.1"
+  },
+  "packageManager": "npm@11.12.1",
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@playwright/test": "1.62.1",
+    "lighthouse": "13.4.1",
+    "typescript": "5.9.3"
+  }
+}

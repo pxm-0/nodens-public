@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import { bookingHref, contactEmail as email } from '../lib/site';
+const github = import.meta.env.PUBLIC_GITHUB_URL ?? 'https://github.com/pxm-0';
+---
+<BaseLayout title="Contact" description="Contact Nodens.">
+  <main class="page-shell" id="main">
+    <div class="page-wrap formal-grid">
+      <div>
+        <p class="eyebrow">Formal record / contact</p>
+        <h1>Contact</h1>
+      </div>
+      <div class="formal-copy">
+        <p>For work, say what the problem is, what it costs, and what done would look like. That is the first step of every engagement, and it can start in an email.</p>
+        <p>For correspondence of any other kind, the same address works.</p>
+        <ul class="formal-list">
+          {bookingHref && <li><ExternalLink href={bookingHref} label="Book a conversation" /></li>}
+          <li><a href={`mailto:${email}`}>Email · {email}</a></li>
+          <li><ExternalLink href={github} label="GitHub · pxm-0" /></li>
+        </ul>
+      </div>
+    </div>
+  </main>
+  <SiteFooter slot="footer" />
+</BaseLayout>

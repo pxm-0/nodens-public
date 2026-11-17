@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import { entryHref, hasRecord, sortEntries } from '../../../lib/content';
+
+// Only published records get a page; the rest are shown as cards on the work page.
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', (project) => hasRecord(project));
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const relatedEntries = sortEntries(
+  await getCollection(
+    'entries',
+    ({ data }) => !data.draft && data.relatedProjects.some((relatedProject) => relatedProject.id === project.id),
+  ),
+);
+---
+
+<BaseLayout title={project.data.title} description={project.data.summary}>
+  <main class="article-shell" id="main">
+    <article class="article">
+      <header class="article-header">
+        <p class="eyebrow">Project record / {project.data.title}</p>
+        <h1>{project.data.title}</h1>
+        <p class="dek">{project.data.subtitle}</p>
+        {project.data.caveat && <p class="dek caveat">{project.data.caveat}</p>}
+      </header>
+      <div class="prose"><Content /></div>
+      {relatedEntries.length > 0 && (
+        <aside class="related-links" aria-label="Related entries">
+          <p class="eyebrow">Related {relatedEntries.length === 1 ? 'entry' : 'entries'}</p>
+          <ul class="formal-list">
+            {relatedEntries.map((entry) => <li><a href={entryHref(entry)}>{entry.data.title}</a></li>)}
+          </ul>
+        </aside>
+      )}
+      <a class="text-link" href="/engineering/">Return to engineering →</a>
+    </article>
+  </main>
+  <SiteFooter slot="footer" />
+</BaseLayout>

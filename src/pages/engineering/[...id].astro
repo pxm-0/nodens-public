@@ -1,0 +1,26 @@
+---
+import { getCollection, getEntries, render } from 'astro:content';
+import EntryLayout from '../../layouts/EntryLayout.astro';
+import { entryRouteId } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('entries', ({ data }) => data.section === 'engineering' && !data.draft);
+  return entries.map((entry) => ({ params: { id: entryRouteId(entry) }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const relatedProjects = await getEntries(entry.data.relatedProjects);
+---
+<EntryLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  section={entry.data.section}
+  kind={entry.data.kind}
+  publishedAt={entry.data.publishedAt}
+  updatedAt={entry.data.updatedAt}
+  tags={entry.data.tags}
+  relatedProjects={relatedProjects}
+>
+  <Content />
+</EntryLayout>
